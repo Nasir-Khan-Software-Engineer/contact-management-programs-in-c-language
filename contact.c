@@ -106,7 +106,7 @@ void AddNewContact(){
     char Email[30];
     char NewContact[100];
     NewContact[0] = 0;
-    printf("*Name should be unique and maximum 20 charters long.\n");
+    printf("*Name should be unique and maximum 20 characters long.\n");
     printf("Enter The Name: ");
     scanf(" %[^\n]s",Name);
     if(strlen(Name) > 20){
@@ -115,7 +115,7 @@ void AddNewContact(){
     if(AlreadyExists(Name) == 1){
         ErrorAndRestart("!!!!Name Already Exists!!!");
     }
-    printf("\n*Phone should be unique and maximum 20 charters long.\n");
+    printf("\n*Phone should be unique and maximum 20 characters long.\n");
     printf("Enter The Phone Number: ");
     scanf("%s",Phone);
     if(strlen(Phone) > 20){
@@ -124,7 +124,7 @@ void AddNewContact(){
     if(AlreadyExists(Phone) == 1){
         ErrorAndRestart("!!!!Phone Number Already Exists!!!");
     }
-    printf("\n*Email should be unique and maximum 30 charters long.\n");
+    printf("\n*Email should be unique and maximum 30 characters long.\n");
     printf("Enter The Email: ");
     scanf("%s",Email);
     if(strlen(Email) > 30){
@@ -234,7 +234,7 @@ void SearchContact(){
 
     int FoundContact = 0;
     char Name[100];
-    printf("*Name should be maximum 20 charters long.\n");
+    printf("*Name should be maximum 20 characters long.\n");
     printf("Enter The Name: ");
     scanf(" %[^\n]s",Name);
     if(strlen(Name) > 20){
@@ -286,7 +286,7 @@ void EditContact(){
     char NewEmail[100];
     char NewFullContact[300];
     NewFullContact[0] = 0;
-    printf("*Name should be maximum 20 charters long.\n");
+    printf("*Name should be maximum 20 characters long.\n");
     printf("Enter The Name which one you want to edit: ");
     scanf(" %[^\n]s",GivenName);
     if(strlen(GivenName) > 20){
@@ -312,7 +312,7 @@ void EditContact(){
 
         if(SkipLines > 0){
             if(LineCount == 1){
-                printf("\n*New Name should be unique and maximum 20 charters long.\n");
+                printf("\n*New Name should be unique and maximum 20 characters long.\n");
                 printf("Old Name is: %s",Line);
                 printf("New Name(0 for skip): ");
                 scanf(" %[^\n]s",NewName);
@@ -330,7 +330,7 @@ void EditContact(){
                 }
                 SkipLines = 2;
             }else if(LineCount == 2){
-                printf("\n*New Phone should be unique and maximum 20 charters long.\n");
+                printf("\n*New Phone should be unique and maximum 20 characters long.\n");
                 printf("Old Phone is: %s",Line);
                 printf("New Phone(0 for skip): ");
                 scanf("%s",NewPhone);
@@ -348,7 +348,7 @@ void EditContact(){
                 }
                 SkipLines = 1;
             }else if(LineCount == 3){
-                printf("\n*New Email should be unique and maximum 30 charters long.\n");
+                printf("\n*New Email should be unique and maximum 30 characters long.\n");
                 printf("Old Email is: %s",Line);
                 printf("New Email(0 for skip): ");
                 scanf("%s",NewEmail);
@@ -399,7 +399,7 @@ void DeleteContact(){
     int FoundTheContact = 0;
     int SkipLines = 0;
     char GivenName[100];
-    printf("\n*Name should be maximum 20 charters long.\n");
+    printf("\n*Name should be maximum 20 characters long.\n");
     printf("Enter The Name which one you want to delete: ");
     scanf(" %[^\n]s",GivenName);
     if(strlen(GivenName) > 20){
