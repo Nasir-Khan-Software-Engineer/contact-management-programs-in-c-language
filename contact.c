@@ -8,18 +8,20 @@
 bool isRunning = true;
 void Menu();
 void AddNewNumber();
-void ShowAllNumber();
-void SearchNumber();
-void EditNumber();
-void DeleteNumber();
-void DeleteAllNumber();
+void ShowAllContacts();
+void SearchContact();
+void EditContact();
+void DeleteContact();
+void DeleteAllContacts();
 void ClearWindow();
-void showNameWithSpace(char *name[20]);
-void showPhoneWithSpace(char *phone[20]);
-void showEmailWithSpace(char *email[20]);
+void ShowNameWithSpace(char *Name[20]);
+void ShowPhoneWithSpace(char *Phone[20]);
+void ShowEmailWithSpace(char *Email[30]);
 void ErrorAndRestart(char *error[100]);
 bool AlreadyExists(char *GivenLine[30]);
 void GoBackOrExit();
+void UserGuideline();
+void AboutUs();
 void Exit();
 
 int main(){
@@ -28,7 +30,7 @@ int main(){
     char AppStarting[100] = "Application is Starting....";
     for(i=0;i<strlen(AppStarting);i++){
         printf("%c",AppStarting[i]);
-        Sleep(50);
+        Sleep(40);
     }
     system("cls");
 
@@ -44,25 +46,33 @@ int main(){
                 Exit();
                 break;
             case '1':
-                AddNewNumber();
+                AddNewContact();
                 break;
             case '2':
-                ShowAllNumber();
+                ShowAllContacts();
                 break;
             case '3':
-                SearchNumber();
+                SearchContact();
                 break;
             case '4':
-                EditNumber();
+                EditContact();
                 break;
             case '5':
-                DeleteNumber();
+                DeleteContact();
                 break;
             case '6':
-                DeleteAllNumber();
+                DeleteAllContacts();
                 break;
             case '7':
                 system("cls");
+                break;
+            case 'I':
+            case 'i':
+                UserGuideline();
+                break;
+            case 'A':
+            case 'a':
+                AboutUs();
                 break;
             default:
                 ErrorAndRestart("Option not found!");
@@ -70,7 +80,7 @@ int main(){
         }
     }
 }
-// all function
+
 void Menu(){
     printf("\n\t **** My-Contact Management System ****\n");
     printf("\n\n\n\t\t\tMAIN MENU\n");
@@ -82,61 +92,67 @@ void Menu(){
     printf("\t\t[5] Delete a Contact\n");
     printf("\t\t[6] Delete All Contact\n");
     printf("\t\t[7] Clear Window\n");
+    printf("\t\t[i] User Guideline\n");
+    printf("\t\t[a] About Us\n");
     printf("\t\t[0] Exit\n\t\t=================\n\t\t");
     printf("Enter the choice:");
 }
 
-void AddNewNumber(){
-    char name[20];
-    char phone[20];
-    char email[30];
+void AddNewContact(){
+    system("cls");
+    printf("\n\t\t **** Add new Contact ****\n\n");
+    char Name[20];
+    char Phone[20];
+    char Email[30];
     char NewContact[100];
     NewContact[0] = 0;
+    printf("*Name should be unique and maximum 20 charters long.\n");
     printf("Enter The Name: ");
-    scanf(" %[^\n]s",name);
-    if(strlen(name) > 20){
+    scanf(" %[^\n]s",Name);
+    if(strlen(Name) > 20){
         ErrorAndRestart("!!!!Name Length Error!!!");
     }
-    if(AlreadyExists(name) == 1){
+    if(AlreadyExists(Name) == 1){
         ErrorAndRestart("!!!!Name Already Exists!!!");
     }
+    printf("\n*Phone should be unique and maximum 20 charters long.\n");
     printf("Enter The Phone Number: ");
-    scanf("%s",phone);
-    if(strlen(phone) > 20){
+    scanf("%s",Phone);
+    if(strlen(Phone) > 20){
         ErrorAndRestart("!!!!Phone Length Error!!!!");
     }
-    if(AlreadyExists(phone) == 1){
+    if(AlreadyExists(Phone) == 1){
         ErrorAndRestart("!!!!Phone Number Already Exists!!!");
     }
+    printf("\n*Email should be unique and maximum 30 charters long.\n");
     printf("Enter The Email: ");
-    scanf("%s",email);
-    if(strlen(email) > 30){
+    scanf("%s",Email);
+    if(strlen(Email) > 30){
         ErrorAndRestart("!!!!Email Length Error!!!!");
     }
-    if(AlreadyExists(email) == 1){
+    if(AlreadyExists(Email) == 1){
         ErrorAndRestart("!!!!Email Already Exists!!!");
     }
-    strcat(NewContact,name);
+    strcat(NewContact,Name);
     strcat(NewContact,"\n");
-    strcat(NewContact,phone);
+    strcat(NewContact,Phone);
     strcat(NewContact,"\n");
-    strcat(NewContact,email);
+    strcat(NewContact,Email);
     strcat(NewContact,"\n");
 
     FILE *allContactTxtFile = fopen("All-Contact.txt","a");
     fprintf(allContactTxtFile,NewContact);
     fclose(allContactTxtFile);
-    printf("Number Added Successfully!\n");
+    printf("\nContact Added Successfully!\n");
     GoBackOrExit();
 }
 
-void ShowAllNumber(){
+void ShowAllContacts(){
+    system("cls");
+    printf("\n\t\t **** All Contacts ****\n\n");
     FILE* AllContactTextFile;
     int LineLength = 300;
-    char line[LineLength];
-
-    system("cls");
-    printf("All Contacts:\n");
+    char Line[LineLength];
 
     printf("|====================|====================|==============================|\n");
     printf("|        Name        |    Phone Number    |          Email               |\n");
@@ -145,125 +161,132 @@ void ShowAllNumber(){
     AllContactTextFile = fopen("All-Contact.txt", "r");
     int TotalContact = 0;
     int LineCount = 0;
-    while(fgets(line, LineLength, AllContactTextFile)) {
+    while(fgets(Line, LineLength, AllContactTextFile)) {
         LineCount++;
         if(LineCount==1){
-            showNameWithSpace(line);
+            ShowNameWithSpace(Line);
         }else if(LineCount == 2){
-           showPhoneWithSpace(line);
+           ShowPhoneWithSpace(Line);
         }else if(LineCount == 3){
-            showEmailWithSpace(line);
+            ShowEmailWithSpace(Line);
             LineCount=0;
             TotalContact++;
         }
     }
-    printf("You Have Total %d Contacts\n",TotalContact);
+    printf("You Have Total %d Contacts.\n\n",TotalContact);
     fclose(AllContactTextFile);
     GoBackOrExit();
 }
 
-void showNameWithSpace(char *name[20]){
+void ShowNameWithSpace(char *Name[20]){
     int i;
-    char *name2 = NULL;
-    name2 = strdup(name);
-    int nameLength = strlen(name2);
+    char *FormatedName = NULL;
+    FormatedName = strdup(Name);
+    int FormatedNameLenght = strlen(FormatedName);
 
     printf("|");
-    for(i=0;i<nameLength-1;i++){
-        printf("%c",name2[i]);
+    for(i=0;i<FormatedNameLenght-1;i++){
+        printf("%c",FormatedName[i]);
     }
 
-    for(i=0;i<=20-nameLength;i++){
+    for(i=0;i<=20-FormatedNameLenght;i++){
         printf(" ");
     }
 }
 
-void showPhoneWithSpace(char *phone[20]){
+void ShowPhoneWithSpace(char *Phone[20]){
     int i;
-    char *phone2 = NULL;
-    phone2 = strdup(phone);
-    int phoneLength = strlen(phone2);
+    char *FormatedPhone = NULL;
+    FormatedPhone = strdup(Phone);
+    int FormatedPhoneLength = strlen(FormatedPhone);
 
     printf("|");
-    for(i=0;i<phoneLength-1;i++){
-        printf("%c",phone2[i]);
+    for(i=0;i<FormatedPhoneLength-1;i++){
+        printf("%c",FormatedPhone[i]);
     }
 
-    for(i=0;i<=20-phoneLength;i++){
+    for(i=0;i<=20-FormatedPhoneLength;i++){
         printf(" ");
     }
 }
 
-void showEmailWithSpace(char *email[30]){
+void ShowEmailWithSpace(char *Email[30]){
     int i;
-    char *emai2 = NULL;
-    emai2 = strdup(email);
-    int emailLength = strlen(emai2);
+    char *FormatedEmai = NULL;
+    FormatedEmai = strdup(Email);
+    int FormatedEmailLength = strlen(FormatedEmai);
 
     printf("|");
-    for(i=0;i<emailLength-1;i++){
-        printf("%c",emai2[i]); // printing email without last char(new line)
+    for(i=0;i<FormatedEmailLength-1;i++){
+        printf("%c",FormatedEmai[i]); // printing email without last char(new line)
     }
 
-    for(i=0;i<=30-emailLength;i++){
+    for(i=0;i<=30-FormatedEmailLength;i++){
         printf(" ");
     }
     printf("|\n");
     printf("|--------------------|--------------------|------------------------------|\n");
 }
 
-void SearchNumber(){
-    int result;
-    char name[100];
+void SearchContact(){
+    system("cls");
+    printf("\n\t\t **** Search Contact ****\n\n");
 
+    int FoundContact = 0;
+    char Name[100];
+    printf("*Name should be maximum 20 charters long.\n");
     printf("Enter The Name: ");
-    scanf(" %[^\n]s",name);
-    if(strlen(name) > 20){
+    scanf(" %[^\n]s",Name);
+    if(strlen(Name) > 20){
         ErrorAndRestart("!!!!Name Length Error!!!");
     }
-    strcat(name,"\n");
+    strcat(Name,"\n");
 
     FILE* AllContactFile;
     int LineLength = 255;
     char Line[LineLength];
     AllContactFile = fopen("All-Contact.txt", "r");
     int LineCount = 0;
-    int TotalContact = 0;
     while(fgets(Line, LineLength, AllContactFile)) {
        LineCount++;
-        if(LineCount == 1){
-            result = strcmp(name, Line);
+        if(LineCount == 1 && strcmp(Name, Line) == 0){
+            FoundContact = 1;
         }
-        if(result == 0){
-
+        if(FoundContact > 0){
             if(LineCount==1){
-                printf("Name: %s",Line);
+                printf("\nContact information of %s",Name);
+                printf("\nName: %s",Line);
             }else if(LineCount == 2){
                 printf("Phone: %s",Line);
             }else if(LineCount == 3){
-                printf("Email: %s",Line);
-                printf("--------------------------\n");
-                LineCount=0;
-                TotalContact++;
+                printf("Email: %s\n",Line);
             }
+        }
+        if(LineCount == 3){
+            LineCount=0;
         }
     }
     fclose(AllContactFile);
-    printf("Total %d Contacts Found!\n",TotalContact);
+    if(FoundContact == 0){
+        printf("\nSorry no contact found for %s\n",Name);
+    }
+    GoBackOrExit();
 }
 
-void EditNumber(){
+void EditContact(){
+    system("cls");
+    printf("\n\t\t **** Edit Contact ****\n\n");
 
-    int lineCount = 0;
-    int foundAndWrite = 0;
-    int skipLines = 0;
+    int LineCount = 0;
+    int FoundContact = 0;
+    int SkipLines = 0;
     char GivenName[100];
     char NewName[100];
     char NewPhone[20];
     char NewEmail[100];
     char NewFullContact[300];
     NewFullContact[0] = 0;
-
+    printf("*Name should be maximum 20 charters long.\n");
     printf("Enter The Name which one you want to edit: ");
     scanf(" %[^\n]s",GivenName);
     if(strlen(GivenName) > 20){
@@ -273,26 +296,28 @@ void EditNumber(){
     strcat(GivenName,"\n");
 
     FILE* OurExistingFile;
-    FILE* newTempFile;
-    int bufferLength = 255;
-    char line[bufferLength];
+    FILE* NewTempFile;
+    int LineLength = 255;
+    char Line[LineLength];
     OurExistingFile = fopen("All-Contact.txt", "r");
-    newTempFile = fopen("temp-file.txt", "w");
-    while(fgets(line, bufferLength, OurExistingFile)) {
-        lineCount++;
+    NewTempFile = fopen("temp-file.txt", "w");
+    while(fgets(Line, LineLength, OurExistingFile)) {
+        LineCount++;
 
-        if(lineCount == 1 && strcmp(GivenName, line) == 0){
+        if(LineCount == 1 && strcmp(GivenName, Line) == 0){
             // we found the contact
-            foundAndWrite = 1;
-            skipLines = 3;
+            FoundContact = 1;
+            SkipLines = 3;
         }
 
-        if(skipLines > 0){
-            if(lineCount == 1){
-                printf("Name(0 for skip): ");
+        if(SkipLines > 0){
+            if(LineCount == 1){
+                printf("\n*New Name should be unique and maximum 20 charters long.\n");
+                printf("Old Name is: %s",Line);
+                printf("New Name(0 for skip): ");
                 scanf(" %[^\n]s",NewName);
                 if(strcmp(NewName, "0") == 0){
-                    strcat(NewFullContact,line);
+                    strcat(NewFullContact,Line);
                 }else{
                     if(strlen(NewName) > 20){
                         ErrorAndRestart("!!!!Name Length Error!!!");
@@ -303,12 +328,14 @@ void EditNumber(){
                     strcat(NewFullContact,NewName);
                     strcat(NewFullContact,"\n");
                 }
-                skipLines = 2;
-            }else if(lineCount == 2){
-                printf("Phone(0 for skip): ");
+                SkipLines = 2;
+            }else if(LineCount == 2){
+                printf("\n*New Phone should be unique and maximum 20 charters long.\n");
+                printf("Old Phone is: %s",Line);
+                printf("New Phone(0 for skip): ");
                 scanf("%s",NewPhone);
                 if(strcmp(NewPhone, "0") == 0){
-                    strcat(NewFullContact,line);
+                    strcat(NewFullContact,Line);
                 }else{
                     if(strlen(NewPhone) > 20){
                         ErrorAndRestart("!!!!Phone Length Error!!!");
@@ -319,13 +346,15 @@ void EditNumber(){
                     strcat(NewFullContact,NewPhone);
                     strcat(NewFullContact,"\n");
                 }
-                skipLines = 1;
-            }else if(lineCount == 3){
-                printf("Email(0 for skip): ");
+                SkipLines = 1;
+            }else if(LineCount == 3){
+                printf("\n*New Email should be unique and maximum 30 charters long.\n");
+                printf("Old Email is: %s",Line);
+                printf("New Email(0 for skip): ");
                 scanf("%s",NewEmail);
 
                 if(strcmp(NewEmail, "0") == 0){
-                    strcat(NewFullContact,line);
+                    strcat(NewFullContact,Line);
                 }else{
                     if(strlen(NewEmail) > 30){
                         ErrorAndRestart("!!!!Email Length Error!!!");
@@ -336,34 +365,41 @@ void EditNumber(){
                     strcat(NewFullContact,NewEmail);
                     strcat(NewFullContact,"\n");
                 }
-                skipLines = 0;
-                lineCount = 0;
-                fprintf(newTempFile,NewFullContact);
+                SkipLines = 0;
+                fprintf(NewTempFile,NewFullContact);
             }
         }else{
-            fprintf(newTempFile,line);
+            fprintf(NewTempFile,Line);
+        }
+
+        if(LineCount == 3){
+            LineCount = 0;
         }
     }
-    fclose(newTempFile);
+    fclose(NewTempFile);
     fclose(OurExistingFile);
 
-    if(foundAndWrite == 0){
+    if(FoundContact == 0){
         printf("Contact Not Found!\n");
         remove("temp-file.txt");
     }else{
-        printf("Contact Update Success\n");
+        printf("\nContact Updated Successfully!\n\n");
         remove("All-Contact.txt");
         rename("temp-file.txt", "All-Contact.txt");
     }
     GoBackOrExit();
 }
 
-void DeleteNumber(){
-    int lineCount = 0;
-    int foundTheContact = 0;
-    int skipLines = 0;
-    char GivenName[100];
+void DeleteContact(){
 
+    system("cls");
+    printf("\n\t\t **** Delete Contact ****\n\n");
+
+    int lineCount = 0;
+    int FoundTheContact = 0;
+    int SkipLines = 0;
+    char GivenName[100];
+    printf("\n*Name should be maximum 20 charters long.\n");
     printf("Enter The Name which one you want to delete: ");
     scanf(" %[^\n]s",GivenName);
     if(strlen(GivenName) > 20){
@@ -372,62 +408,58 @@ void DeleteNumber(){
     strcat(GivenName,"\n");
 
     FILE* OurExistingFile;
-    FILE* newTempFile;
+    FILE* NewTempFile;
     int LineLenght = 300;
     char line[LineLenght];
     OurExistingFile = fopen("All-Contact.txt", "r");
-    newTempFile = fopen("temp-file.txt", "w");
+    NewTempFile = fopen("temp-file.txt", "w");
     while(fgets(line, LineLenght, OurExistingFile)) {
         lineCount++;
 
         if(lineCount == 1 && strcmp(GivenName, line) == 0){
             // we found the contact
-            foundTheContact = 1;
-            skipLines = 3;
+            FoundTheContact = 1;
+            SkipLines = 3;
         }
 
-        if(skipLines > 0){
-            if(lineCount == 1){
-                // skipping the name
-                skipLines = 2;
-            }else if(lineCount == 2){
-                // skipping the phone
-                skipLines = 1;
-            }else if(lineCount == 3){
-                // skipping the email
-                skipLines = 0;
-                lineCount = 0;
-            }
+        if(SkipLines > 0){
+            SkipLines--;
         }else{
-            fprintf(newTempFile,line);
+            fprintf(NewTempFile,line);
+        }
+
+        if(lineCount == 3){
+            lineCount = 0;
         }
     }
-    fclose(newTempFile);
+    fclose(NewTempFile);
     fclose(OurExistingFile);
 
-    if(foundTheContact == 0){
-        printf("Contact Not Found!\n");
+    if(FoundTheContact == 0){
+        printf("\nContact Not Found!\n\n");
         remove("temp-file.txt");
     }else{
-        printf("Contact Delete Success\n");
+        printf("\nContact Deleted Successfully!\n\n");
         remove("All-Contact.txt");
         rename("temp-file.txt", "All-Contact.txt");
     }
     GoBackOrExit();
 }
 
-void DeleteAllNumber(){
-    char option;
+void DeleteAllContacts(){
+    system("cls");
+    printf("\n\t\t **** Delete All The Contacts ****\n\n");
+
+    char Option;
     getchar();
     printf("Are you sure want to delete all the contacts? (Y,N)?: ");
-    scanf("%c",&option);
-    if(option=='Y' || option=='y'){
+    scanf("%c",&Option);
+    if(Option=='Y' || Option=='y'){
         int i;
         remove("All-Contact.txt");
-        FILE *allContactTxtFile = fopen("All-Contact.txt","a");
-        fclose(allContactTxtFile);
+        FILE *AllContactTxtFile = fopen("All-Contact.txt","a");
+        fclose(AllContactTxtFile);
 
-        system("cls");
         char Deleting[100] = "Deleting....";
         for(i=0;i<strlen(Deleting);i++){
             printf("%c",Deleting[i]);
@@ -438,6 +470,7 @@ void DeleteAllNumber(){
     }
     GoBackOrExit();
 }
+
 bool AlreadyExists(char *GivenLine[30]){
     char *ThisLine[35];
     ThisLine[0] = 0;
@@ -492,6 +525,38 @@ void GoBackOrExit(){
     }
 }
 
+void UserGuideline(){
+    system("cls");
+    printf("\n\t\t **** My-Contact Management System ****\n");
+    printf("\n\n\n\t\t\tUser Guideline\n");
+    printf("\t\t===============================\n");
+    printf("\t\t[>] This Program is created using C Language.\n");
+    printf("\t\t[>] Contact information will store in a text file.\n");
+    printf("\t\t[>] You will found the text file in the same folder.\n");
+    printf("\t\t[>] Text fill create automatically.\n");
+    printf("\t\t[>] Name, Phone and email should be unique.\n");
+    printf("\t\t[>] Maximum length of name is 20 characters.\n");
+    printf("\t\t[>] Maximum length of phone is 20 characters.\n");
+    printf("\t\t[>] Maximum length of email is 30 characters.\n");
+    printf("\t\t===============================\n\t\t");
+
+    GoBackOrExit();
+}
+
+void AboutUs(){
+    system("cls");
+    printf("\n\t\t **** My-Contact Management System ****\n");
+    printf("\n\n\n\t\t\tAbout US\n");
+    printf("\t\t======================\n");
+    printf("\t\t[i] This program is managed by CodeCartBD.com and InsideTheDiv.com\n");
+    printf("\t\t[i] CodeCartBD is a programing related platform from where you can\n");
+    printf("\t\t[>] learn computer programming or related technology in Bangla Language.\n");
+    printf("\t\t[i] InsideTheDiv is a programing related platform where you will\n");
+    printf("\t\t[>] found programing related problem's solution with source code.\n");
+    printf("\t\t======================\n\t\t");
+    GoBackOrExit();
+}
+
 void Exit(){
     getchar();
     printf("Are You Sure Want to Exit? (Y,N): ");
@@ -499,6 +564,9 @@ void Exit(){
     scanf("%c",&YesOrNO);
     if(YesOrNO == 'Y' || YesOrNO == 'y'){
         system("cls");
+        printf("Visit www.CodeCartBd.com for more.\n");
+        printf("Visit www.insideTheDiv.com for more.\n");
+
         char ThankYou[100] = "=====Thank You=====\n";
         char SeeYouSoon[100] = "=====See You Soon=====\n";
         int i=0;
@@ -512,8 +580,6 @@ void Exit(){
         }
         isRunning =  false;
     }else{
-        system("cls");
-        isRunning = true;
+         isRunning = true;
     }
 }
-
