@@ -211,7 +211,6 @@ void PrintLineWithSpace(char *Name[20],char ContactInfo){
     }
 }
 
-
 void SearchContact(){
     system("cls");
     printf("\n\t\t **** Search Contact ****\n\n");
