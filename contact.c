@@ -79,14 +79,16 @@ int main(){
                 break;
         }
     }
+
+    return 0;
 }
 
 void Menu(){
-    printf("\n\t **** My-Contact Management System ****\n");
-    printf("\n\n\n\t\t\tMAIN MENU\n");
+    printf("\n\t **** My-Contact Management System Using C ****\n");
+    printf("\n\t\t\tMAIN MENU\n");
     printf("\t\t=====================\n");
     printf("\t\t[1] Add a new Contact\n");
-    printf("\t\t[2] List all Contacts\n");
+    printf("\t\t[2] Show all Contacts\n");
     printf("\t\t[3] Search for contact\n");
     printf("\t\t[4] Edit a Contact\n");
     printf("\t\t[5] Delete a Contact\n");
@@ -111,27 +113,33 @@ void AddNewContact(){
     scanf(" %[^\n]s",Name);
     if(strlen(Name) > 20){
         ErrorAndRestart("!!!!Name Length Error!!!");
+        return;
     }
     if(AlreadyExists(Name,'n') == 1){
         ErrorAndRestart("!!!!Name Already Exists!!!");
+        return;
     }
     printf("\n*Phone should be unique and maximum 20 characters long.\n");
     printf("Enter The Phone Number: ");
     scanf("%s",Phone);
     if(strlen(Phone) > 20){
         ErrorAndRestart("!!!!Phone Length Error!!!!");
+        return;
     }
     if(AlreadyExists(Phone,'p') == 1){
         ErrorAndRestart("!!!!Phone Number Already Exists!!!");
+        return;
     }
     printf("\n*Email should be unique and maximum 30 characters long.\n");
     printf("Enter The Email: ");
     scanf("%s",Email);
     if(strlen(Email) > 30){
         ErrorAndRestart("!!!!Email Length Error!!!!");
+        return;
     }
     if(AlreadyExists(Email,'e') == 1){
         ErrorAndRestart("!!!!Email Already Exists!!!");
+        return;
     }
     strcat(NewContact,Name);
     strcat(NewContact,"\n");
@@ -222,6 +230,7 @@ void SearchContact(){
     scanf(" %[^\n]s",Name);
     if(strlen(Name) > 20){
         ErrorAndRestart("!!!!Name Length Error!!!");
+        return;
     }
     strcat(Name,"\n");
 
@@ -230,19 +239,24 @@ void SearchContact(){
     char Line[LineLength];
     AllContactFile = fopen("All-Contact.txt", "r");
     int LineCount = 0;
+    int NeedToPrintLine = 0;
     while(fgets(Line, LineLength, AllContactFile)) {
        LineCount++;
         if(LineCount == 1 && strcmp(Name, Line) == 0){
             FoundContact = 1;
+            NeedToPrintLine = 3;
         }
-        if(FoundContact > 0){
+        if(NeedToPrintLine > 0){
             if(LineCount==1){
                 printf("\nContact information of %s",Name);
                 printf("\nName: %s",Line);
+                NeedToPrintLine = 2;
             }else if(LineCount == 2){
                 printf("Phone: %s",Line);
+                NeedToPrintLine = 1;
             }else if(LineCount == 3){
                 printf("Email: %s\n",Line);
+                NeedToPrintLine = 0;
             }
         }
         if(LineCount == 3){
@@ -274,6 +288,7 @@ void EditContact(){
     scanf(" %[^\n]s",GivenName);
     if(strlen(GivenName) > 20){
         ErrorAndRestart("!!!!Name Length Error!!!");
+        return;
     }
 
     strcat(GivenName,"\n");
@@ -304,9 +319,11 @@ void EditContact(){
                 }else{
                     if(strlen(NewName) > 20){
                         ErrorAndRestart("!!!!Name Length Error!!!");
+                        return;
                     }
                     if(AlreadyExists(NewName,'n') == 1){
                         ErrorAndRestart("!!!!Name Already Exists!!!");
+                        return;
                     }
                     strcat(NewFullContact,NewName);
                     strcat(NewFullContact,"\n");
@@ -322,9 +339,11 @@ void EditContact(){
                 }else{
                     if(strlen(NewPhone) > 20){
                         ErrorAndRestart("!!!!Phone Length Error!!!");
+                        return;
                     }
                     if(AlreadyExists(NewPhone,'p') == 1){
                         ErrorAndRestart("!!!!Phone Already Exists!!!");
+                        return;
                     }
                     strcat(NewFullContact,NewPhone);
                     strcat(NewFullContact,"\n");
@@ -341,9 +360,11 @@ void EditContact(){
                 }else{
                     if(strlen(NewEmail) > 30){
                         ErrorAndRestart("!!!!Email Length Error!!!");
+                        return;
                     }
                     if(AlreadyExists(NewEmail,'e') == 1){
                         ErrorAndRestart("!!!!Email Already Exists!!!");
+                        return;
                     }
                     strcat(NewFullContact,NewEmail);
                     strcat(NewFullContact,"\n");
@@ -446,7 +467,7 @@ void DeleteAllContacts(){
         char Deleting[100] = "Deleting....";
         for(i=0;i<strlen(Deleting);i++){
             printf("%c",Deleting[i]);
-            Sleep(70);
+            Sleep(40);
         }
         printf("\nSuccessfully Deleted All Contacts!\n\n");
 
@@ -525,7 +546,7 @@ void UserGuideline(){
     printf("\t\t[>] This Program is created using C Language.\n");
     printf("\t\t[>] Contact information will store in a text file.\n");
     printf("\t\t[>] You will found the text file in the same folder.\n");
-    printf("\t\t[>] Text fill create automatically.\n");
+    printf("\t\t[>] Text file create automatically.\n");
     printf("\t\t[>] Name, Phone and email should be unique.\n");
     printf("\t\t[>] Maximum length of name is 20 characters.\n");
     printf("\t\t[>] Maximum length of phone is 20 characters.\n");
@@ -564,14 +585,12 @@ void Exit(){
         int i=0;
         for(i=0;i<strlen(ThankYou);i++){
             printf("%c",ThankYou[i]);
-            Sleep(100);
+            Sleep(40);
         }
         for(i=0;i<strlen(SeeYouSoon);i++){
             printf("%c",SeeYouSoon[i]);
-            Sleep(100);
+            Sleep(40);
         }
         isRunning =  false;
-    }else{
-         isRunning = true;
     }
 }
