@@ -4,3 +4,4 @@
 </p>
 
 <img src="menu.png" width="100%" atl="contact management system menu">
+<p>Read the full documentation to learn <a href="https://insidethediv.com/contact-management-system-program-in-c" target="_blank">how to crate a menu for contact management system</a>.<p>
