@@ -1,1 +1,1 @@
-<h1>Contact Managment System In C</h1>
+<h1>Contact Management System In C</h1>
