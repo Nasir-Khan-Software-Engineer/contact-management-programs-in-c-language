@@ -20,9 +20,5 @@
 <p>Read the full documentation to learn <a href="https://insidethediv.com/contact-management-system-program-in-c" target="_blank">how to searcg a new contact in a contact management system</a>.<p>
 
 
+<mark>Watch The Full <a href="https://www.youtube.com/embed/qryAyBxOzPg">Video</a> For better understanding</mark>
 
-<video width="100%" height="240" controls>
-  <source src="https://www.youtube.com/embed/qryAyBxOzPg" type="video/mp4">
-  <source src="https://www.youtube.com/embed/qryAyBxOzPg" type="video/ogg">
-  Contact Management System Project in c programming language with source code
-</video>
